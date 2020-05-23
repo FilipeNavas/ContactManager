@@ -37,12 +37,4 @@ public class Item extends Model{
     @ManyToOne
     public User user;
     
-    public Item(){}
-
-    public Item(String firstname, String lastname) {
-        this.firstname = firstname;
-        this.lastname = lastname;
-    }
-    
-    
 }

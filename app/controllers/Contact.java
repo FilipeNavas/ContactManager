@@ -19,38 +19,38 @@ public class Contact extends Controller{
      * Get all contacts from the logged user
      */
     public static void getAll() {
-        User user = Member.getLoggeedUser();
+        User user = Member.getLoggedUser();
         List list = user.contacts;
         render(list);
     }
     
     /**
      * This methods renders the add view. 
-     * If present, it will send the item to the view to pre-populate the inputs (it happens when validation fails)
-     * @param item 
+     * If present, it will send the contact to the view to pre-populate the inputs (it happens when validation fails)
+     * @param contact 
      */
-    public static void add(Item item){
-        renderArgs.put("item", item);
+    public static void add(Item contact){
+        renderArgs.put("contact", contact);
         render();
     }
     
     public static void edit(@Required long id){
-        Item item = Item.findById(id);
-        if(item == null){
+        Item contact = Item.findById(id);
+        if(contact == null){
             flash.error("Contact not found!" ); 
             getAll();
         }
         
         String dobString = "";
-        if(item !=null && item.dob != null) //avoid dob being null
-            dobString = Application.formatDate(item.dob);
+        if(contact !=null && contact.dob != null) //avoid dob being null
+            dobString = Application.formatDate(contact.dob);
         
-        renderArgs.put("item", item);
+        renderArgs.put("contact", contact);
         renderArgs.put("dob", dobString);
         render();
     }
     
-    public static void addAction(@Valid Item item, String action){
+    public static void addAction(@Valid Item contact, String action){
         if(validation.hasErrors()) {              
             params.flash(); // add http parameters to the flash scope
             Validation.keep(); // keep the errors for the next request (because we call the method to render after)
@@ -60,25 +60,25 @@ public class Contact extends Controller{
             flash.put("messageType", "warning");
             */
             flash.error("There are required fields missing" );            
-            add(item); //pass the item as an argument to pre-populate the fields
+            add(contact); //pass the contact as an argument to pre-populate the fields
         }
         
         //gets logged user to associate contacts to it
         String loggedUserEmail = Security.connected();
         User user = User.find("email", loggedUserEmail).first();        
         
-        //associates user id to item foreing key
-        item.user = user;
+        //associates user id to contact foreing key
+        contact.user = user;
         
-        //edit just updates a single contact
+        //edit
         if(action.equals("edit")){               
-            item.edit("item", params.all());
-            item.save(); //explicit save
+            contact.edit("contact", params.all());
+            contact.save(); //explicit save
             flash.success("Contact edited successfully!");
         
-        //save creates a new item, associates to user and updates user
+        //save creates a new contact
         }else{                        
-            item.save();
+            contact.save();
             flash.success("Contact added successfully!");
         }
         
@@ -86,7 +86,7 @@ public class Contact extends Controller{
     }
     
     /**
-     * Returns a JSON of one item given an id 
+     * Returns a JSON of one contact given an id (used in the view contact modal)
      * @param id      
      */
     public static void getOneJsonAction(@Required long id){
@@ -96,9 +96,9 @@ public class Contact extends Controller{
             getAll();
         }
         
-        Item item = Item.findById(id);
-        item.user = null; //to avoid circular referencer expection
-        renderJSON(item, Item.class);
+        Item contact = Item.findById(id);
+        contact.user = null; //to avoid circular referencer expection
+        renderJSON(contact, Item.class);
     }
     
     public static void deleteAction(@Required long id) {
@@ -109,9 +109,9 @@ public class Contact extends Controller{
             getAll();
         }
         
-        Item item = Item.findById(id);
-        item.delete();
-        flash.success("%s was deleted successfully!", item.firstname);        
+        Item contact = Item.findById(id);
+        contact.delete();
+        flash.success("%s was deleted successfully!", contact.firstname);        
         getAll();
     }
         
