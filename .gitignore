@@ -19,3 +19,5 @@ target
 # Play
 logs
 RUNNING_PID
+server.pid
+tmp
