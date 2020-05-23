@@ -2,8 +2,25 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-# Home page
+# Import Secure routes
+*      /                module:secure
+
+# Application routes
 GET     /                                       Application.index
+GET     /login                                  Application.login
+GET     /logout                                 Application.logout
+GET     /signup                                 Application.signup
+POST    /signup                                 Application.signupAction
+
+# Contact routes
+GET     /contacts                               Contact.getAll
+GET     /contacts/{id}/json                     Contact.getOneJsonAction
+GET     /contacts/add                           Contact.add
+GET     /contacts/{id}                          Contact.edit
+POST    /contacts/{id}                          Contact.delete
+
+# User routes
+GET     /user/settings                          Member.settings
 
 # Ignore favicon requests
 GET     /favicon.ico                            404

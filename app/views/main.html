@@ -4,13 +4,61 @@
     <head>
         <title>#{get 'title' /}</title>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
         <link rel="stylesheet" media="screen" href="@{'/public/stylesheets/main.css'}">
         #{get 'moreStyles' /}
         <link rel="shortcut icon" type="image/png" href="@{'/public/images/favicon.png'}">
-        <script src="@{'/public/javascripts/jquery-1.6.4.min.js'}" type="text/javascript" charset="UTF-8"></script>
+
+        <!-- Jquery (load first) -->
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+        <!-- Custom JavaScript -->
+        <script src="@{'/public/javascripts/main.js'}" type="text/javascript" charset="UTF-8"></script>
         #{get 'moreScripts' /}
+
+        <!-- Bootstrap 4 CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">        
     </head>
     <body>
-        #{doLayout /}  
+        <div class="container">
+            
+            #{if flash.message || flash.success || flash.error}
+            <div class="row">
+                <div class="col text-center">
+                    #{if flash.success}
+                        <div class="main-alert alert alert-success lert-dismissible fade show fixed-top pa-4" role="alert">
+                            ${flash.success}
+                    #{/if}
+                    #{elseif flash.error}
+                        <div class="main-alert alert alert-warning lert-dismissible fade show fixed-top pa-4" role="alert">
+                            #{if flash.error == 'secure.error'}
+                                &{flash.error}
+                            #{/if}
+                            #{else}
+                                ${flash.error}
+                            #{/else}  
+                    #{/elseif}                        
+                    #{else}
+                       <div class="main-alert alert alert-${flash.messageType} lert-dismissible fade show fixed-top pa-4" role="alert">
+                    #{/else}  
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <br>
+                        ${flash.message}                        
+                        
+                    </div>
+                </div>
+            </div>
+            #{/if}
+
+            #{doLayout /}  
+        </div>
+
+        <!-- Bootstrap 4 JS -->
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+
     </body>
 </html>

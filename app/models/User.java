@@ -1,15 +1,39 @@
 package models;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import play.data.validation.Email;
+import play.data.validation.Password;
+import play.data.validation.Required;
+import play.db.jpa.Model;
 
 /**
  *
- * @author filip
+ * @author filipe
  */
-public class User {
+
+@Entity
+public class User extends Model{
+    
+    @Required
+    public String firstname;
+    
+    @Required
+    public String lastname;
+    
+    @Required
+    @Email
+    public String email;
+    
+    @Required
+    @Password
+    public String password;
+    
+    public int birthdayReminderHours;
+       
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    public List<Item> contacts;
     
 }
